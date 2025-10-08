@@ -13,9 +13,14 @@ describe('AuthService', () => {
     const users: User[] = [];
 
     mockedUsersService = {
-      find: (email: string) => Promise.resolve(users.filter((user) => user.email === email)),
+      find: (email: string) =>
+        Promise.resolve(users.filter((user) => user.email === email)),
       create: (email: string, password: string) => {
-        const user = { id: Math.floor(Math.random() * 999999), email, password } as User;
+        const user = {
+          id: Math.floor(Math.random() * 999999),
+          email,
+          password,
+        } as User;
 
         users.push(user);
 
@@ -65,15 +70,15 @@ describe('AuthService', () => {
 
   it('should throw an error if an invalid password is provided', async () => {
     await service.signup('asdf@asdf.com', 'asdf');
-    await expect(
-      service.signin('asdf@asdf.com', 'passowrd'),
-    ).rejects.toThrow(BadRequestException);
+    await expect(service.signin('asdf@asdf.com', 'passowrd')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
-    it('should return a user if correct password is provided', async () => {
-      await service.signup('asdf@asdf.com', 'laskdjf');
-      const user = await service.signin('asdf@asdf.com', 'laskdjf');
+  it('should return a user if correct password is provided', async () => {
+    await service.signup('asdf@asdf.com', 'laskdjf');
+    const user = await service.signin('asdf@asdf.com', 'laskdjf');
 
-      expect(user).toBeDefined();
-    });
+    expect(user).toBeDefined();
+  });
 });
